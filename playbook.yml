@@ -1,6 +1,6 @@
 ---
 - name: Your Playbook
-  hosts: "{{ ansible_play_hosts }}"
+  hosts: localhost
   become: yes  # Run tasks with elevated privileges
 
   tasks:
