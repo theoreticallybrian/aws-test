@@ -1,9 +1,14 @@
 ---
 - name: Your Playbook
-  hosts: localhost
+  hosts: "{{ ansible_play_hosts }}"
   become: yes  # Run tasks with elevated privileges
 
   tasks:
+    - name: Ensure destination directory exists
+      file:
+        path: /home/ec2-user
+        state: directory
+
     - name: Download and overwrite helloworld.js file
       get_url:
         url: https://raw.githubusercontent.com/theoreticallybrian/aws-test/main/helloworld2.js
