@@ -1,6 +1,6 @@
 ---
 - name: Your Playbook
-  hosts: localhost
+  hosts: linux
   become: yes  # Run tasks with elevated privileges
 
   tasks:
