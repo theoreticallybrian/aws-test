@@ -1,0 +1,19 @@
+---
+- name: Your Playbook
+  become: yes  # Run tasks with elevated privileges
+
+  tasks:
+    - name: Download and overwrite helloworld.js file
+      get_url:
+        url: https://raw.githubusercontent.com/theoreticallybrian/aws-test/main/helloworld2.js
+        dest: /home/ec2-user/helloworld.js
+
+    - name: Install MongoDB version 4.0
+      yum:
+        name: mongodb-org-4.0
+        state: present
+
+  handlers:
+    - name: Restart PM2 Process
+      command: "pm2 restart helloworld"
+      become: yes

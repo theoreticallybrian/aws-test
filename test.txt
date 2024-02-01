@@ -1,7 +1,9 @@
+pinging aws
 ANSIBLE_HOST_KEY_CHECKING=False ansible all -i "ec2-51-20-96-123.eu-north-1.compute.amazonaws.com," --extra-vars 'ansible_user=ec2-user' --private-key=/usr/bin/cloud-formation-keypair.pem -m ping
 
 
 
 
-ANSIBLE_HOST_KEY_CHECKING=False ansible all -i "ec2-51-20-96-123.eu-north-1.compute.amazonaws.com," --extra-vars 'ansible_user=ec2-user' --private-key=/usr/bin/cloud-formation-keypair.pem -a "cat etc/os-release"
 
+#applying yaml changes
+ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i "ec2-51-20-96-123.eu-north-1.compute.amazonaws.com," --extra-vars 'ansible_user=ec2-user' --private-key=/usr/bin/cloud-formation-keypair.pem playbook.yml

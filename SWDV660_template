@@ -62,7 +62,7 @@
       "instance": {
         "Properties": {
           "ImageId": "ami-090793d48e56d862c",
-          "InstanceType": "t3.micro",
+          "InstanceType": "t2.nano",
           "KeyName": {
             "Ref": "KeyPair"
           },
