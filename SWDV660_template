@@ -1,101 +1,107 @@
 {
     "Description": "Effective DevOps in AWS: HelloWorld web application",
     "Outputs": {
-        "InstancePublicIp": {
-            "Description": "Public IP of our instance.",
-            "Value": {
-                "Fn::GetAtt": [
-                    "instance",
-                    "PublicIp"
-                ]
-            }
-        },
-        "WebUrl": {
-            "Description": "Application endpoint. Updated port to 3333",
-            "Value": {
-                "Fn::Join": [
-                    "",
-                    [
-                        "http://",
-                        {
-                            "Fn::GetAtt": [
-                                "instance",
-                                "PublicDnsName"
-                            ]
-                        },
-                        ":",
-                        "3333"
-                    ]
-                ]
-            }
+      "InstancePublicIp": {
+        "Description": "Public IP of our instance.",
+        "Value": {
+          "Fn::GetAtt": [
+            "instance",
+            "PublicIp"
+          ]
         }
+      },
+      "WebUrl": {
+        "Description": "Application endpoint. Updated port to 3333",
+        "Value": {
+          "Fn::Join": [
+            "",
+            [
+              "http://",
+              {
+                "Fn::GetAtt": [
+                  "instance",
+                  "PublicDnsName"
+                ]
+              },
+              ":",
+              "3333"
+            ]
+          ]
+        }
+      }
     },
     "Parameters": {
-        "KeyPair": {
-            "ConstraintDescription": "must be the name of an existing EC2 KeyPair.",
-            "Description": "Name of an existing EC2 KeyPair to SSH",
-            "Type": "AWS::EC2::KeyPair::KeyName"
-        }
+      "KeyPair": {
+        "ConstraintDescription": "must be the name of an existing EC2 KeyPair.",
+        "Description": "Name of an existing EC2 KeyPair to SSH",
+        "Type": "AWS::EC2::KeyPair::KeyName"
+      }
     },
     "Resources": {
-        "SecurityGroup": {
-            "Properties": {
-                "GroupDescription": "Allow SSH and TCP/3333 access after updating port to 3333",
-                "SecurityGroupIngress": [
-                    {
-                        "CidrIp": "0.0.0.0/0",
-                        "FromPort": "22",
-                        "IpProtocol": "tcp",
-                        "ToPort": "22"
-                    },
-                    {
-                        "CidrIp": "0.0.0.0/0",
-                        "FromPort": "3333",
-                        "IpProtocol": "tcp",
-                        "ToPort": "3333"
-                    }
-                ]
+      "SecurityGroup": {
+        "Properties": {
+          "GroupDescription": "Allow SSH,and TCP/3333 access after updating port to 3333",
+          "SecurityGroupIngress": [
+            {
+              "CidrIp": "0.0.0.0/0",
+              "FromPort": "22",
+              "IpProtocol": "tcp",
+              "ToPort": "22"
             },
-            "Type": "AWS::EC2::SecurityGroup"
+           
+            {
+              "CidrIp": "0.0.0.0/0",
+              "FromPort": "3333",
+              "IpProtocol": "tcp",
+              "ToPort": "3333"
+            }
+          ]
         },
-        "instance": {
-            "Properties": {
-                "ImageId": "ami-090793d48e56d862c",
-                "InstanceType": "t3.micro",
-                "KeyName": {
-                    "Ref": "KeyPair"
-                },
-                "SecurityGroups": [
-                    {
-                        "Ref": "SecurityGroup"
-                    }
-                ],
-                "UserData": {
-                    "Fn::Base64": {
-                        "Fn::Join": [
-                            "\n",
-                            [
-                                "#!/bin/bash",
-                                "sudo yum install --enablerepo=epel -y nodejs",
-                                "wget https://cf-templates-8a5vv2g2mapb-eu-north-1.s3.eu-north-1.amazonaws.com/helloworld.js?response-content-disposition=inline&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEHwaCmFwLXNvdXRoLTEiRzBFAiBjH6e%2BjNAsbi9MwtjnV0r2d870UOoZeunRa0bMvak3UAIhALstuNefqGSzjyArzxfllpJ6khfPZkc0%2B6idJP7KpekRKuQCCEYQABoMMzM5NzEyOTY4Nzg5IgyRT0P5wU%2BaEkGoNiYqwQItLhVQ6OuboQPbx1mRaaAXwp3VovGKmFnOK0SaeedunfXxmOvRFGZqZbq8os%2FGtWP0ZnpdEa0JF4kAPY11QK3%2FNb4KjZKhhsdgNcnohzk6vZ5lt8QWPafh6sLbJJ1lgIfztaMcDhVKCPvbx0RnS1QwdxvenRiNgvRJ8QfUZlTn0CfK9fPM1yNcsi22U6XgikoXE4AUiA%2BMXDcaUCCO1I7i9HzhryT9e%2BFzaIJvW%2BxrFqETwMfbXFsVeY5CwQ%2FR2IW4C6r4jieV7Z68a8NSI9h3fRPj8INz%2FuygsFVcgORXRCidAdumnWQk%2F104ZRiqBjSaayoPOfY8nhtbHjjCqiBNYTcR9OX%2FUszOrLpylrJHcTs%2F%2Bu9eyreEAqpKStH5qnDfIeOqWqg%2FcDRBwze3pmDyJpCMGRO6geOCOSaMrMj%2BSX8w5ZTurQY6swKa9JKpclcOXZzKIrD86j2E0o1xB88%2Fa9rG0Ta04rOZsMQgcMk9LIOTOY1v2I4N6lcZC702z%2FLQAnCWfSMDegll3c0N%2BoxThZbfvfkVqK3pm7uoi8KCthwuvo86xJmaGXsWd%2FNhM0RiKY%2BwNRwdb70Fu8ATvMQU0Lr2VFC18uNA3nxpxAC%2Fa4dqm9U1dtRg8Ur1aXkikdL5t2lK%2F3u4u7ShMSopjmiYvtUlCXyeDJx%2B4ujS3SGTTpYRcvkxHzc2t3qXcCby7%2BnJuBQFPjg9sevQNszGRe151aqOTc9%2BCa36D4rMxUzZYJ6t7twvOR6m7i89AK0uvEuQvzhH%2FZW5XUiG5GY5x6ed9LZ5L1L5Iak1xeywAUbawbj%2BtiMM76ScVUMm7SloQ1tGxnsiXjMVMQKEyIxe&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20240201T123503Z&X-Amz-SignedHeaders=host&X-Amz-Expires=300&X-Amz-Credential=ASIAU6GDYRBK37JPAMPF%2F20240201%2Feu-north-1%2Fs3%2Faws4_request&X-Amz-Signature=5a6d7920645e702df84c83ce6c67dc89ab0b02d6f6cc09c1b07c11061d7bc47f -O /home/ec2-user/helloworld.js",
-                                "wget http://bit.ly/2vVvT18 -O /etc/init/helloworld.conf",
-                                "start helloworld"
-                            ]
-                        ]
-                    }
-                },
-                "Tags": [
-                    {
-                        "Key": "Name",
-                        "Value": "HelloWorldInstance"
-                    },
-                    {
-                        "Key": "InstanceType",
-                        "Value": "T2.nano"
-                    }
+        "Type": "AWS::EC2::SecurityGroup"
+      },
+      "instance": {
+        "Properties": {
+          "ImageId": "ami-090793d48e56d862c",
+          "InstanceType": "t3.micro",
+          "KeyName": {
+            "Ref": "KeyPair"
+          },
+          "SecurityGroups": [
+            {
+              "Ref": "SecurityGroup"
+            }
+          ],
+          "UserData": {
+            "Fn::Base64": {
+              "Fn::Join": [
+                "\n",
+                [
+                  "#!/bin/bash",
+                  "yum install epel-release",
+                  "yum install nodejs ",
+                  "wget https://raw.githubusercontent.com/theoreticallybrian/aws-test/main/helloworld.js -O /home/ec2-user/helloworld.js",
+                  "wget http://bit.ly/2vVvT18 -O /etc/init/helloworld.conf",
+                  "start helloworld"
+
+            
+
                 ]
+              ]
+            }
+          },
+          "Tags": [
+            {
+              "Key": "Name",
+              "Value": "HelloWorldInstance"
             },
-            "Type": "AWS::EC2::Instance"
-        }
+            {
+              "Key": "InstanceType",
+              "Value": "T2.nano"
+            }
+          ]
+        },
+        "Type": "AWS::EC2::Instance"
+      }
     }
-}
+  }
+  
